@@ -9,7 +9,7 @@ from waitress import serve
 from zipfile import ZipFile
 import pickle
 from flask import Flask, render_template, jsonify, request, flash, redirect, url_for
-from flask_wtf import Form, validators  
+#from flask_wtf import Form, validators  
 from wtforms.fields import StringField
 from wtforms import TextField, BooleanField, PasswordField, TextAreaField, validators
 from wtforms.widgets import TextArea
