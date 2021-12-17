@@ -1,5 +1,6 @@
 #API FLASK run (commande : python api/api.py)
 # Local Adresse :  http://127.0.0.1:5000/credit/IDclient
+# serve(app, host="0.0.0.0", port=8080)
 from waitress import serve
 
 
@@ -69,5 +70,5 @@ def credit(id_client):
 
 #lancement de l'application
 if __name__ == "__main__":
-        serve(app, host="0.0.0.0", port=8080)
+        serve(app, host="0.0.0.0")
         #app.run(debug=True)
