@@ -10,3 +10,5 @@ scikit_learn>=0.24.1
 shap>=0.39
 Flask==2.0.2
 Flask-RESTful==0.3.9
+waitress==2.0.0
+uvicorn==0.16.0
