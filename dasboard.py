@@ -8,6 +8,7 @@ import shap
 from urllib.request import urlopen
 import json
 import os
+import requests
 import plotly.express as px
 from zipfile import ZipFile
 from sklearn.model_selection import GridSearchCV
@@ -234,6 +235,7 @@ def main() :
         prediction = API_data['client risk in %']
     
     st.write("**Default risk probability : **{:.0f} %".format(round(float(prediction), 3)))
+    #st.write("**Default risk probability : **{:.0f} %".format(round(float(r.json()), 3)))
     
 
 

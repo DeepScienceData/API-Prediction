@@ -68,19 +68,10 @@ def credit(id_client):
 
     return jsonify(output)
 
-@app.route('/predict_api',methods=['POST'])
-def predict_api():
-    '''
-    For direct API calls trought request
-    '''
-    data = request.get_json(force=True)
-    prediction = clf.predict([np.array(list(data.values()))])
 
-    output = prediction[0]
-    return jsonify(output)
 
 #lancement de l'application
 if __name__ == "__main__":
-        app.run(debug=True)
-        #serve(app, host="0.0.0.0")
+        #app.run(debug=True)
+        serve(app, host="0.0.0.0")
 
