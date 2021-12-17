@@ -226,7 +226,8 @@ def main() :
     # Local pridiction :
     
     #Appel de l'API : 
-    API_url = "https://api-prediction-credit.herokuapp.com/credit" + str(chk_id)
+    API_url = "https://api-prediction-credit.herokuapp.com/credit/" + str(chk_id)
+    #API_url = "http://localhost:8080/credit/" + str(chk_id)
 
     with st.spinner('Chargement du score du client...'):
         json_url = urlopen(API_url)

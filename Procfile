@@ -1,2 +1,1 @@
-web:   gunicorn app:app
-
+web: sh app/setup.sh && streamlit run app/dasboard.py && python app/api.py
