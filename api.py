@@ -50,7 +50,7 @@ id_client = sample.index.values
 clf = load_model()
 
 #--------------------- Creation of methode for API -----------------------------------------------------------#
-@app.route('/')
+@app.route('/credit/<id_client>', methods=['GET','POST'])
 def credit(id_client):
 
 
