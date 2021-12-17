@@ -1,6 +1,7 @@
 #API FLASK run (commande : python api/api.py)
 # Local Adresse :  http://127.0.0.1:5000/credit/IDclient
 # serve(app, host="0.0.0.0", port=8080)
+#web: gunicorn  --bind 0.0.0.0:$PORT api:app
 from waitress import serve
 
 
@@ -16,7 +17,7 @@ import pandas as pd
 
 # Création d'une instance FLASK
 app = Flask(__name__)
-#api = Api(app)
+api = Api(app)
 
 #----------------------------------- Functions ---------------------------------------#
 def load_data():
@@ -50,14 +51,9 @@ id_client = sample.index.values
 clf = load_model()
 
 #--------------------- Creation of methode for API -----------------------------------------------------------#
-
 @app.route('/credit/<id_client>', methods=['GET'])
 def credit(id_client):
-
-
     score, predict = load_prediction(sample,id_client, clf)
-
-    
     # round the predict proba value and set to new variable
     percent_score = score*100
     id_risk = np.round(percent_score, 3)
@@ -69,10 +65,12 @@ def credit(id_client):
 
     return jsonify(output)
 
+api.add_resource(credit)
 
 
 #lancement de l'application
 if __name__ == "__main__":
-        app.run(debug=True)
+        #app.run(debug=True)
+        app.run(port = 5000, debug=True, use_reloader=False)
         #serve(app, host="127.0.0.1",port=8000)
 
