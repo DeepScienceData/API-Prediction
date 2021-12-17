@@ -16,7 +16,7 @@ import pandas as pd
 
 # Création d'une instance FLASK
 app = Flask(__name__)
-api = Api(app)
+#api = Api(app)
 
 #----------------------------------- Functions ---------------------------------------#
 def load_data():
@@ -50,7 +50,7 @@ id_client = sample.index.values
 clf = load_model()
 
 #--------------------- Creation of methode for API -----------------------------------------------------------#
-@app.route('/credit/<id_client>', methods=['GET'])
+@app.route('/credit/<id_client>', methods=['GET','POST'])
 def credit(id_client):
 
 
@@ -70,5 +70,6 @@ def credit(id_client):
 
 #lancement de l'application
 if __name__ == "__main__":
-        serve(app, host="0.0.0.0")
-        #app.run(debug=True)
+        app.run(debug=True)
+        #serve(app, host="0.0.0.0")
+
