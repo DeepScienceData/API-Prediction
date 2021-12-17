@@ -67,6 +67,11 @@ def credit(id_client):
 
 api.add_resource(credit)
 
+@app.route("/")
+def home():
+    return "Endpoints are online."
+
+
 
 #lancement de l'application
 if __name__ == "__main__":
