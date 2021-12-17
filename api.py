@@ -7,17 +7,20 @@ from waitress import serve
 
 #---------------------------------- Libarie ---------------------------------------#
 from zipfile import ZipFile
-from flask import Flask, render_template, jsonify, request, flash, redirect, url_for
-from flask_restful import reqparse, abort, Api, Resource
 import pickle
-import numpy as np
-import pandas as pd
+from flask import Flask, render_template, jsonify, request, flash, redirect, url_for
+from flask_wtf import Form, validators  
+from wtforms.fields import StringField
+from wtforms import TextField, BooleanField, PasswordField, TextAreaField, validators
+from wtforms.widgets import TextArea
+
+
 
 
 
 # Création d'une instance FLASK
 app = Flask(__name__)
-api = Api(app)
+#api = Api(app)
 
 #----------------------------------- Functions ---------------------------------------#
 def load_data():
@@ -50,6 +53,8 @@ data, sample = load_data()
 id_client = sample.index.values
 clf = load_model()
 
+
+
 #--------------------- Creation of methode for API -----------------------------------------------------------#
 @app.route('/credit/<id_client>', methods=['GET'])
 def credit(id_client):
@@ -65,11 +70,31 @@ def credit(id_client):
 
     return jsonify(output)
 
-api.add_resource(credit)
+#api.add_resource(credit)
 
-@app.route("/")
-def home():
-    return "Endpoints are online."
+#formulaire d'appel à l'API (facultatif)
+class SimpleForm(Form):
+    form_id = TextField('id:', validators=[validators.required()])
+    
+    @app.route("/", methods=['GET', 'POST'])
+    def form():
+        form = SimpleForm(request.form)
+        print(form.errors)
+
+        if request.method == 'POST':
+            form_id=request.form['id']
+            print(form_id)
+            return(redirect('credit/'+form_id)) 
+    
+        if form.validate():
+            # Save the comment here.
+            flash('Vous avez demandé l\'ID : ' + form_id)
+            redirect('')
+        else:
+            flash('Veuillez compléter le champ. ')
+    
+        return render_template('formulaire_id.html', form=form)
+
 
 
 
