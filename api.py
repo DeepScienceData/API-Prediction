@@ -11,7 +11,6 @@ from flask_restful import reqparse, abort, Api, Resource
 import pickle
 import numpy as np
 import pandas as pd
-import os
 
 
 
@@ -51,8 +50,7 @@ id_client = sample.index.values
 clf = load_model()
 
 #--------------------- Creation of methode for API -----------------------------------------------------------#
-client_path = os.environ.get('API_URL')
-@app.route(os.path.join(client_path,id_client), methods=['GET'])
+@app.route('/credit/<id_client>', methods=['GET'])
 def credit(id_client):
 
 
