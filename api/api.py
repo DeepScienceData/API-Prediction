@@ -29,10 +29,10 @@ def main() :
             return data_client
     @st.cache
     def load_prediction(sample, id, clf):
-            X=sample.iloc[:, :126]
-            score = clf.predict_proba(X[X.index == int(id)])[:,1]
-            predict = clf.predict(X[X.index == int(id)])
-            return score, predict
+        X=sample.iloc[:, :126]
+        prediction = clf.predict_proba(X[X.index == int(id)])[:,1]
+        predict = clf.predict(X[X.index == int(id)])
+        return prediction, predict
 
     #Chargement des donner :
     data, sample = load_data()
@@ -42,24 +42,35 @@ def main() :
     #######################################
     ####### HOME PAGE - MAIN CONTENT ######
     #######################################
+    html_temp = """
+    <div style="background-color: tomato; padding:10px; border-radius:10px">
+    <h1 style="color: white; text-align:center">API Predction</h1>
+    </div>
+    <p style="font-size: 20px; font-weight: bold; text-align:center">Credit decision prediction</p>
+    """
+    st.markdown(html_temp, unsafe_allow_html=True)
 
-    #Customer information display : Customer Gender, Age, Family status, Children, …
-    st.header("**API Predction**")
     #Loading selectbox
-    chk_id = st.sidebar.selectbox("Client ID", id_client)
-    prediction = load_prediction(sample, chk_id, clf)
-    st.write("**Default probability : **{:.0f} %".format(round(float(prediction)*100, 2)))
+    chk_id = st.selectbox("Client ID", id_client)
+    predict,score = load_prediction(sample, chk_id, clf)
+    prediction = np.round(predict, 3)*100
+    st.write("**Default score : **{} ".format(float(np.round(score, 2))))
+    st.write("**Default probability : **{} %".format(float(prediction)))
+
+    # Seuil d'acceptabliter 
     
-    
+    number = st.slider("Pick threshold Decision.", 0, 100,5)
 
 
-    #Compute decision according to the best threshold 50% (it's just a guess)
-    if prediction <= 50.0 :
-        decision = "<font color='green'>**LOAN GRANTED**</font>" 
+    #Compute decision according to the best threshold  (it's just a guess)
+    st.write("**Decision with threshold {}** :".format(number))
+    if prediction <= number :
+        decision = "<font color='green'>**LOAN GRANTED**</font>"
     else:
         decision = "<font color='red'>**LOAN REJECTED**</font>"
-
-    st.write("**Decision** *(with threshold 50%)* **: **", decision, unsafe_allow_html=True)
     
+    st.write("**Decision**  **: **", decision, unsafe_allow_html=True)
+    
+
 if __name__ == '__main__':
     main()
