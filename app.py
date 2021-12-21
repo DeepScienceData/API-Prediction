@@ -45,25 +45,20 @@ def hello():
     """
     return jsonify({"text":"Hello, the API is up and running..." })
 
-#--------------------- Creation of methode for API -----------------------------------------------------------#
-@app.route('/credit/<id_client>', methods=['GET'])
-def credit(id_client):
+@app.route('/predict', methods=['POST'])
+def predict():
+    # parse input features from request
+    request_json = request.get_json()
+    df = pd.json_normalize(request_json)
+ 
+    # load model
+    prediction = model.predict_proba(df)[:, 1][0]
+    # Format prediction in percentage with 2 decimal points
+    prediction = "The client has a " + str(round(prediction*100,2)) + "% risk of defaulting on their loan."
+    print("prediction: ", prediction)
 
+    # Return output
+    return jsonify(json.dumps(str(prediction)))
 
-    score, predict = load_prediction(sample,id_client, clf)
-
-    
-    # round the predict proba value and set to new variable
-    percent_score = score*100
-    id_risk = np.round(percent_score, 3)
-    # create JSON object
-    output = {'prediction': int(predict), 'client risk in %': float(id_risk)}
-
-
-    print('Nouvelle Prédiction : \n', output)
-
-    return jsonify(output)
-
-#lancement de l'application
-if __name__ == "__main__":
-        app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
